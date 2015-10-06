@@ -1,0 +1,22 @@
+problem: 
+carman@LENOVO:~/Downloads/swig$ osmocom_fft
+gr-osmosdr v0.1.4-48-g86ad5842 (0.1.5git) gnuradio v3.7.8-136-g222e0003
+built-in source types: file fcd rtl rtl_tcp rfspace 
+Using device #0 Realtek RTL2838UHIDIR SN: 00000001
+
+Kernel driver is active, or device is claimed by second instance of librtlsdr.
+In the first case, please either detach or blacklist the kernel module
+(dvb_usb_rtl28xxu), or enable automatic detaching at compile time.
+
+usb_claim_interface error -6
+
+FATAL: Failed to open rtlsdr device.
+
+Trying to fill up 1 missing channel(s) with null source(s).
+This is being done to prevent the application from crashing
+due to gnuradio bug #528.
+
+solve:
+http://cache.baiducontent.com/c?m=9f65cb4a8c8507ed4fece763105392230e54f72b67868a4223c3933fcc33461a1b30b4f1302267468987616703ac4f41e8f62b72321e60f1c5df883c9cedd23f28fc76732d59c15c069644ef9d49628070875b99b81e93adf142c2f08188804352ba44020e97f1fb015c529d2fa44760b4b19939421f50e7ad&p=876dd05b85cc43ff57ed9779544c8e&newp=b4759a45d5c41bbe0ab0c7710f558c231610db2151d4d51425c5c115&user=baidu&fm=sc&query=usb_claim_interface+error&qid=b92c97ef00002d3c&p1=2
+
+sudo rmmod dvb_usb_rtl28xxu rtl2832
