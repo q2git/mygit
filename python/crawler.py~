@@ -1,0 +1,91 @@
+#fix the UnicodeEncodeError issue
+#import sys
+#reload(sys)
+#sys.setdefaultencoding( "utf-8" )
+
+import re,os,getpass,threading
+from bs4 import BeautifulSoup
+import urllib
+import urllib2
+import cookielib
+
+def set_opener():
+    #proxy handler
+    prohost={'http':'host'}
+    proxy=urllib2.ProxyHandler(prohost) 
+    psw_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+    proau = urllib2.ProxyBasicAuthHandler(psw_mgr)
+    proUser=raw_input('proxy username:')
+    proPsw=getpass.getpass('proxy password:')
+    proau.add_password(None, 'host', proUser, proPsw)  
+    #cookie handler
+    cookie=urllib2.HTTPCookieProcessor(cookielib.CookieJar())  
+    #build & install opener
+    opener=urllib2.build_opener(cookie,urllib2.HTTPHandler(0))
+    return opener
+
+#read web content
+def read_url(opener,url,data=None):
+    #HTTP heards
+    user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0)Gecko/20100101 Firefox/38.0;Mozilla Firefox 38.2.0 - 10792--72'
+    header={'User-Agent':user_agent}
+    
+    req = urllib2.Request(url,data,header)
+    try:
+        print 'reading url "%s"...   '%url[-50:],
+        data=opener.open(req).read()
+        print 'done.'
+    except urllib2.HTTPError as e:
+        print 'HTTP Error: ',e.code,e.msg 
+    except urllib2.URLError as e:
+        print 'URL Error: ',e.reason
+    
+    return data
+
+#analysis web content to get file links
+def analysis_html(html):
+    links=[]
+    soup = BeautifulSoup(html, 'lxml')
+    marker=soup.find_all('img',src=re.compile(r'http:.*?'))
+    for link in marker:
+        link=link.get('src')
+        link=link.split('&')[0] #remove &xxx
+        #if link:data.append(link)
+        links.append(link)
+    return links
+
+#download file
+def download_file(opener,links):
+    for link in links:
+        data=read_url(opener,link) #read link
+        fname='img/'+link.split('/')[-1]
+        try:
+            print 'writing data to "%s"...   '%fname,
+            f=open(fname,'wb')
+            f.write(data)
+            #f.write('soup.txt',link.split('/')[-1]+'\r\n')
+            f.close()
+            print 'done.'
+        except:
+            print 'write error.'
+   
+def main():
+    opener=set_opener()
+#logon website
+    #logurl='http://www.taoguba.com.cn/login'
+    #post data for logon
+    #user=raw_input('Username:')
+    #psw=getpass.getpass('Password:')
+    #post=urllib.urlencode({'userName':user,'pwd':psw,'mobileFlag':'Y','pwdlevel':'Y'})
+    #logon website
+    #data=read_web(opener,logurl,post)
+    
+    html=read_url(opener,'http://www.baidu.com')
+    links=analysis_html(html)
+    download_file(opener,links)
+
+
+    
+if __name__ == "__main__":
+    main()
+
