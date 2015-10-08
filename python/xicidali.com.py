@@ -56,7 +56,6 @@ class Test(threading.Thread):
         while True:
             self.test_proxy(self.q_addr.get())
             self.q_addr.task_done()
-            time.sleep(0.1)
             cnt=cnt+1
 
     def test_proxy(self,addr):
@@ -64,10 +63,12 @@ class Test(threading.Thread):
         h_proxy=urllib2.ProxyHandler(proxy)
         opener=urllib2.build_opener(h_proxy,H_HTTP)
         try:
-            response=opener.open('http://www.google.com',timeout=5).read()
+            t0 = time.time()
+            response=opener.open('http://www.google.com',timeout=5)
+            t1 = time.time()
             print '%s-->Testing: %s PASSED'%(self.getName(),proxy)
-            lst.append(addr)
-            #write_html('%s.html'%cnt,response)
+            lst.append(addr+' %.2f'%(t1-t0))
+            write_html('%s.html'%(addr.split(' ')[0]),response.read())
         except Exception as e:
             print '%s-->Testing: %s FAILED'%(self.getName(),proxy)
             #print e
@@ -116,7 +117,7 @@ def main():
     for x in xrange(10):
         th = Test(que_addr)
         th.start()
-        time.sleep(0.1)
+        #time.sleep(0.1)
     
     que_url.join()
     que_addr.join()
