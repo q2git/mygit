@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>567</width>
-    <height>327</height>
+    <width>573</width>
+    <height>315</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -24,7 +24,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>-50</y>
       <width>571</width>
       <height>311</height>
      </rect>
@@ -40,9 +40,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>561</width>
-        <height>281</height>
+        <y>20</y>
+        <width>570</width>
+        <height>300</height>
        </rect>
       </property>
       <property name="font">
@@ -300,8 +300,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>567</width>
-     <height>21</height>
+     <width>573</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuProxy_Test">
@@ -311,6 +311,7 @@
    </widget>
    <addaction name="menuProxy_Test"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <resources/>
  <connections/>

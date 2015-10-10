@@ -40,7 +40,7 @@ class startQt4(QtGui.QMainWindow):
             c = QtGui.QColor(255,0,0)
         
         b.clear() #clear all content
-        b.setColumnWidth(0,80)
+        b.setColumnWidth(0,85)
         b.setColumnWidth(1,150)
         b.setColumnWidth(2,100)
         b.setColumnWidth(2,100) 
@@ -48,7 +48,6 @@ class startQt4(QtGui.QMainWindow):
         cnt = 0
         for item in self.list: 
             t = item.split(' ')
-            print t[2]
             if t[2].strip() == txt:
                 cnt += 1
                 a = QtGui.QTreeWidgetItem(b)
