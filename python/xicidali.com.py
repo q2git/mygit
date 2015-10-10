@@ -36,7 +36,9 @@ class Put_proxy(threading.Thread):
         try:
             response=opener.open(req)
             html=response.read()
-            print 'Done reading from "%s" '%url 
+            lock.acquire()
+            print 'Done reading from "%s" '%url
+            lock.release()
         except urllib2.HTTPError as e:
             print 'Http: ',e
         except urllib2.URLError as e:
@@ -62,17 +64,25 @@ class Test(threading.Thread):
         proxy={addr.split(' ')[1]:addr.split(' ')[0]}
         h_proxy=urllib2.ProxyHandler(proxy)
         opener=urllib2.build_opener(h_proxy,H_HTTP)
-        try:
-            t0 = time.time()
-            response=opener.open('http://www.google.com',timeout=5)
-            t1 = time.time()
-            print '%s-->Testing: %s PASSED'%(self.getName(),proxy)
-            lst.append(addr+' %.2f'%(t1-t0))
-            write_html('%s.html'%(addr.split(' ')[0]),response.read())
-        except Exception as e:
-            print '%s-->Testing: %s FAILED'%(self.getName(),proxy)
-            #print e
-    
+        fails = 0
+        while not(fails > 2):
+            try:
+                t0 = time.time()
+                response=opener.open('http://www.google.com',timeout=5).read(100)
+                t1 = time.time()
+                lock.acquire()
+                print '%s-%s->%s PASSED @%.2fs'%(self.getName(),os.getpid(),proxy,(t1-t0))
+                lock.release()
+                lst.append(addr+' %.2f'%(t1-t0))
+                #write_html('%s.html'%(addr.split(' ')[0]),response.read())
+                break
+            except Exception as e:
+                fails = fails + 1
+                lock.acquire()
+                print '%s-%s->%s FAILED %d times'%(self.getName(),os.getpid(),proxy,fails)
+                lock.release()
+                #print e
+        
 #write html
 def write_html(fname,html):
     try:
@@ -96,9 +106,10 @@ def write_file(prolist,method='wb'):
         print 'Excp: ',e
 
 def main():
-    global lst,cnt
+    global lst,cnt,lock
     lst = []
     cnt = 0
+    lock = threading.Lock()
     t0 = time.time()
     
     que_addr = Queue.Queue()
@@ -114,7 +125,7 @@ def main():
     th = Put_proxy(que_url,que_addr)
     th.start()
         
-    for x in xrange(10):
+    for x in xrange(20):
         th = Test(que_addr)
         th.start()
         #time.sleep(0.1)
@@ -122,10 +133,12 @@ def main():
     que_url.join()
     que_addr.join()
 
+    print '-------------Test Report-------------'
     print 'Tested proxy: %d'%cnt
+    print 'Passed proxy: %d'%len(lst)
     print 'Elapsed time: %.2fs'%(time.time()-t0)
     write_file(lst)
     
    
-if __name__=='__main__':
+if __name__=='__main__':  
     main()
