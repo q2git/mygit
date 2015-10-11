@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>573</width>
-    <height>315</height>
+    <width>621</width>
+    <height>467</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -24,9 +24,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-50</y>
-      <width>571</width>
-      <height>311</height>
+      <y>0</y>
+      <width>611</width>
+      <height>361</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -39,9 +39,9 @@
      <widget class="QTreeWidget" name="treeList">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>20</y>
-        <width>570</width>
+        <x>20</x>
+        <y>10</y>
+        <width>571</width>
         <height>300</height>
        </rect>
       </property>
@@ -126,10 +126,10 @@
      <widget class="QTreeWidget" name="treeList_P">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>561</width>
-        <height>281</height>
+        <x>20</x>
+        <y>10</y>
+        <width>571</width>
+        <height>301</height>
        </rect>
       </property>
       <property name="font">
@@ -213,10 +213,10 @@
      <widget class="QTreeWidget" name="treeList_F">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>561</width>
-        <height>281</height>
+        <x>20</x>
+        <y>10</y>
+        <width>571</width>
+        <height>301</height>
        </rect>
       </property>
       <property name="font">
@@ -294,13 +294,26 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QPushButton" name="bt_start">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>370</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>573</width>
+     <width>621</width>
      <height>25</height>
     </rect>
    </property>

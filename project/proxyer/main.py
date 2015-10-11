@@ -19,10 +19,23 @@ class startQt4(QtGui.QMainWindow):
         
         QtCore.QObject.connect(self.ui.tabWidget,QtCore.SIGNAL('currentChanged(int)'),
                                self.tab_change)
-                               
+        QtCore.QObject.connect(self.ui.treeList,QtCore.SIGNAL('itemClicked(QTreeWidgetItem*,int)'),
+                               self.list_selected)                       
+        QtCore.QObject.connect(self.ui.bt_start,QtCore.SIGNAL('clicked()'),
+                               self.btstart)        
         #all proxy list
         self.tab_change(0)
+    
+    def btstart(self):
+        it = QtGui.QTreeWidgetItemIterator(self.ui.treeList)
+        it
+        while it.value():
+            #print it.value().text(1),it.value().text(0)
+            it += 1
         
+         
+    def list_selected(self,item,index):
+        print item.text(1),index,QtCore.QModelIndex(self.ui.treeList.indexFromItem(item)).row()
     def tab_change(self,tab_id):
         txt = ''
         

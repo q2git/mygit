@@ -34,7 +34,7 @@ class Get_Proxy(threading.Thread):
             content=addr.contents[5].string+':'+\
                      addr.contents[7].string+' '+\
                      addr.contents[13].string 
-            LST.append(content.lower() + ' ' + random.choice(['PASS','FAIL','TESTING']))
+            LST.append(content.lower())# + ' ' + random.choice(['PASS','FAIL','TESTING']))
             #print content,' put into queue.'
 
     def read_html(self,url):

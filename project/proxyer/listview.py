@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'tree.ui'
+# Form implementation generated from reading ui file 'listview.ui'
 #
-# Created: Sat Oct 10 15:43:05 2015
+# Created: Sat Oct 10 21:16:28 2015
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_PorxyList(object):
     def setupUi(self, PorxyList):
         PorxyList.setObjectName(_fromUtf8("PorxyList"))
-        PorxyList.resize(567, 327)
+        PorxyList.resize(621, 467)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -35,12 +35,12 @@ class Ui_PorxyList(object):
         self.centralwidget = QtGui.QWidget(PorxyList)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
-        self.tabWidget.setGeometry(QtCore.QRect(0, 0, 571, 311))
+        self.tabWidget.setGeometry(QtCore.QRect(0, 0, 611, 361))
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.tab1 = QtGui.QWidget()
         self.tab1.setObjectName(_fromUtf8("tab1"))
         self.treeList = QtGui.QTreeWidget(self.tab1)
-        self.treeList.setGeometry(QtCore.QRect(0, 0, 561, 281))
+        self.treeList.setGeometry(QtCore.QRect(20, 10, 571, 300))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Arial"))
         font.setPointSize(9)
@@ -81,7 +81,7 @@ class Ui_PorxyList(object):
         self.tab2 = QtGui.QWidget()
         self.tab2.setObjectName(_fromUtf8("tab2"))
         self.treeList_P = QtGui.QTreeWidget(self.tab2)
-        self.treeList_P.setGeometry(QtCore.QRect(0, 0, 561, 281))
+        self.treeList_P.setGeometry(QtCore.QRect(20, 10, 571, 301))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Arial"))
         font.setPointSize(9)
@@ -122,7 +122,7 @@ class Ui_PorxyList(object):
         self.tab3 = QtGui.QWidget()
         self.tab3.setObjectName(_fromUtf8("tab3"))
         self.treeList_F = QtGui.QTreeWidget(self.tab3)
-        self.treeList_F.setGeometry(QtCore.QRect(0, 0, 561, 281))
+        self.treeList_F.setGeometry(QtCore.QRect(20, 10, 571, 301))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Arial"))
         font.setPointSize(9)
@@ -160,13 +160,19 @@ class Ui_PorxyList(object):
         font.setWeight(75)
         self.treeList_F.headerItem().setFont(4, font)
         self.tabWidget.addTab(self.tab3, _fromUtf8(""))
+        self.bt_start = QtGui.QPushButton(self.centralwidget)
+        self.bt_start.setGeometry(QtCore.QRect(0, 370, 111, 41))
+        self.bt_start.setObjectName(_fromUtf8("bt_start"))
         PorxyList.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(PorxyList)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 567, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 621, 25))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuProxy_Test = QtGui.QMenu(self.menubar)
         self.menuProxy_Test.setObjectName(_fromUtf8("menuProxy_Test"))
         PorxyList.setMenuBar(self.menubar)
+        self.statusBar = QtGui.QStatusBar(PorxyList)
+        self.statusBar.setObjectName(_fromUtf8("statusBar"))
+        PorxyList.setStatusBar(self.statusBar)
         self.menubar.addAction(self.menuProxy_Test.menuAction())
 
         self.retranslateUi(PorxyList)
@@ -193,5 +199,6 @@ class Ui_PorxyList(object):
         self.treeList_F.headerItem().setText(3, _translate("PorxyList", "Elapsed Time", None))
         self.treeList_F.headerItem().setText(4, _translate("PorxyList", "Comments", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab3), _translate("PorxyList", "Failed Proxy", None))
+        self.bt_start.setText(_translate("PorxyList", "Start", None))
         self.menuProxy_Test.setTitle(_translate("PorxyList", "Proxy Test", None))
 
