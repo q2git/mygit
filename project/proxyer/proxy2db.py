@@ -22,8 +22,8 @@ def open_conn(db = r'D:\mydata.db'):
     conn.execute(table)
     return conn
     
-
-############################    
+############################
+#item = [(host,port,type,speed,pf),()...]    
 def db_update(items):   
     if type(items)!=types.ListType:
         print 'wrong type, List required.'
@@ -38,21 +38,23 @@ def db_update(items):
         record = cur.execute("select host from PROXY where host=?",(item[0],)).fetchone()
 
         if record is None:
-            print "Inserting the new host %s ..."%item[0]
+            print "Inserting new host %s ..."%item[0],
             cur.execute('insert into PROXY values(?,?,?,?,?,0,0)',(item))
+            print 'Done.'
         else:
-            print "Updating the host %s ..."%item[0]
+            print "Updating host %s ..."%item[0],
             if item[4] == 'PASS':
                 cur.execute('update PROXY set port=?,type=?,speed=?,pf=?,ptimes=ptimes+1 where host=?',
                             (item[1],item[2],item[3],item[4],item[0]))
             elif item[4] == 'FAIL':
                 cur.execute('update PROXY set port=?,type=?,speed=?,pf=?,ftimes=ftimes+1 where host=?',
                             (item[1],item[2],item[3],item[4],item[0]))
-                            
+            print 'Done.'
+                
     cur.close()
     conn.close()
 
 ############################  
 if __name__ == '__main__':    
-    items=[('10.10.11.12','8888','http','3.5s','FAIL'),('10.10.10.12','8888','http','3.5s','PASS')]
+    items=[('10.10.11.12','8888','http','3.5s','PASS'),('10.10.10.12','8888','http','3.5s','PASS')]
     db_update(items)
