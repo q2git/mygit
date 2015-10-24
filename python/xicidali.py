@@ -1,5 +1,5 @@
 import urllib2,sqlite3
-import os,time,types
+import os,time
 import threading,Queue
 from bs4 import BeautifulSoup
 
