@@ -7,9 +7,6 @@ from mylibs.discuz_login import *
 
 #read web content
 def read_url(opener,url,data=None):
-    #HTTP heards
-    user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0)Gecko/20100101 Firefox/38.0;Mozilla Firefox 38.2.0 - 10792--72'
-    header={'User-Agent':user_agent}
     req = urllib2.Request(url,data,header)
     html=''
     c=1 

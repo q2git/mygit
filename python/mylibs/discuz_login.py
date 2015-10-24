@@ -23,12 +23,15 @@ def login_dz(**parms):
       arg[key] = parms[key]
     else:
       arg[key] = ''
-       
+  #HTTP heards
+  user_agent=r'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0)Gecko/20100101 Firefox/38.0;Mozilla Firefox 38.2.0 - 10792--72'
+  header=[('User-Agent',user_agent)]       
   #cookie设置
   cookieFile = './discuz_cookies.dat'
   cookie = cookielib.LWPCookieJar()
-  opener = urllib2.build_opener(urllib2.HTTPHandler(0),urllib2.HTTPCookieProcessor(cookie))
- 
+  opener = urllib2.build_opener(urllib2.HTTPHandler(1),urllib2.HTTPCookieProcessor(cookie))
+  opener.addheaders = header
+  
   #获取formhash
   pre_login = arg['domain']+'member.php?mod=logging&action=login&infloat=yes&handlekey=login&inajax=1&ajaxtarget=fwin_content_login'
   c = opener.open(pre_login).read()
@@ -55,12 +58,24 @@ def login_dz(**parms):
     data=postdata
     )
   c = opener.open(req).read()
-  print c
+  
+  readback(c)
   flag = '登陆失败 %s'%arg['username']
   if 'succeedhandle_login' in c:
       flag = opener
   return flag
- 
+
+#write proxy list to a text file
+def readback(data):
+    try:
+        print 'writing data to readback.html...'
+        f=open('readback.html','w')
+        f.write(data)
+        print 'done'
+    except Exception as e:
+        print 'Excp: ',e 
+    finally:
+        f.close()
  
 #使用例子：基本参数登陆
 '''

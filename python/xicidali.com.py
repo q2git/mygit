@@ -116,9 +116,9 @@ def main():
     que_url = Queue.Queue()
 
     #put URLs to the que_url
-    sub=['nn','nt','wn','wt']
+    sub=['wn','wt'] #['nn','nt','wn','wt']
     for d in sub:
-        for i in range(1,2):
+        for i in range(1,10):
             url = 'http://www.xicidaili.com/%s/%s'%(d,str(i))
             que_url.put(url)
 
