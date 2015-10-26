@@ -152,12 +152,12 @@ def write_txt(que_results):
 ###############################################################################
 def main(): 
     que_urls = Queue.Queue()
-    que_proxy = Queue.Queue(1000)
-    que_resutls = Queue.Queue(1000)
+    que_proxy = Queue.Queue()
+    que_resutls = Queue.Queue()
     #put urls into a queue
     sub=['nn','nt','wn','wt']
     for d in sub:
-        for i in range(1,21):
+        for i in range(1,2):
             url = 'http://www.xicidaili.com/%s/%s'%(d,str(i))
             que_urls.put(url)
     que_urls.put(None)
@@ -169,7 +169,7 @@ def main():
     time.sleep(5)
     print 'started to testing the proxies...'
     ths = []
-    for x in xrange(20):
+    for x in xrange(10):
         th = Test(que_proxy,que_resutls)
         th.start()
         ths.append(th)
