@@ -1,23 +1,34 @@
 # -*- coding: utf-8 -*-
-import scrapy
-from scrapy.linkextractors import LinkExtractor
+#import scrapy
 from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
+from scrapy.utils.project import get_project_settings
+from scrapy.crawler import CrawlerProcess
 
-from pjs.items import PjsItem
-
-
-class CraSpiderSpider(CrawlSpider):
-    name = 'cra_spider'
-    allowed_domains = ['c.com']
-    start_urls = ['http://www.c.com/']
+class CrSpider(CrawlSpider):
+    name = 'cr'
+    #allowed_domains = ['example.com']
+    start_urls = ['file:///D:/02_BOMs/test.HTM']
 
     rules = (
-        Rule(LinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=('Index.htm'))),
+        Rule(LinkExtractor(allow=('.HTM', )), callback='parse_item'),
     )
-
+    
     def parse_item(self, response):
-        i = PjsItem()
-        #i['domain_id'] = response.xpath('//input[@id="sid"]/@value').extract()
-        #i['name'] = response.xpath('//div[@id="name"]').extract()
-        #i['description'] = response.xpath('//div[@id="description"]').extract()
-        return i
+        #self.logger.info('Hi, this is an item page! %s', response.url)
+        #print response.url
+        return {'SAPPart':response.xpath('//nobr[@id="l0003022"]/text()').extract_first(),
+               'Desc' :response.xpath('//nobr[@id="l0004022"]/text()').extract_first()
+               }
+
+
+ 
+if __name__ == '__main__':
+
+    #process = CrawlerProcess({
+    #        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+    #    }) 
+    process = CrawlerProcess(get_project_settings())   
+    process.crawl(CrSpider)
+    process.start() # the script will block here until the crawling is finished
