@@ -1,13 +1,83 @@
 # -*- coding: utf-8 -*-
 import scrapy
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
+from scrapy.loader import ItemLoader
+from scrapy.loader.processors import TakeFirst, MapCompose, Join
 
+from pjs.items import SapItem
 
-class BscSpiderSpider(scrapy.Spider):
-    name = "bsc_spider"
-    allowed_domains = ["b.com"]
-    start_urls = (
-        'http://www.b.com/',
-    )
+class BsSpider(scrapy.Spider):
+    name = "bs"
+    allowed_domains = ['dmoz.org']
 
+    #start_urls = [
+    #    "file:///D:/02_BOMs/BACKUP/Index.htm",
+        #"http://www.dmoz.org/Computers/Programming/Languages/Python/",
+    #]
+    #'''
+    def __init__(self, PN=[], *args, **kwargs):
+            super(BsSpider, self).__init__(*args, **kwargs)
+            for item in PN:
+                self.start_urls.append('file:///D:/02_BOMs/%s' % item)
+            
+    def parse(self,response):
+        l = ItemLoader(item=SapItem(), response=response)
+        l.add_xpath('SAPPart','//nobr[@id="l0003022"]/text()')
+        l.add_xpath('Desc','//nobr[@id="l0004022"]/text()')
+        #l.default_input_processor = MapCompose()
+        l.default_output_processor = Join()
+        return l.load_item()
+        #return {'SAPPart':response.xpath('//nobr[@id="l0003022"]/text()').extract(),
+        #       'Desc' :response.xpath('//nobr[@id="l0004022"]/text()').extract()
+        #       }
+        #for href in response.xpath('//a[@class="file"]/@href').extract():
+        #    url = href#response.urljoin(href)
+            #yield scrapy.Request(url, callback=self.parse_bom,dont_filter=True)
+    
+    def parse_bom(self, response):
+        #for item in response.xpath('//nobr'):
+        print response.url
+        return {'SAPPart':response.xpath('//nobr[@id="l0003022"]/text()').extract(),
+               'Desc' :response.xpath('//nobr[@id="l0004022"]/text()').extract()
+               }
+
+    #'''
+ 
+    ''' 
     def parse(self, response):
-        pass
+        for href in response.css("ul.directory.dir-col > li > a::attr('href')"):
+            url = response.urljoin(href.extract())
+            yield scrapy.Request(url, callback=self.parse_dir_contents)
+
+    def parse_dir_contents(self, response):
+
+        for sel in response.xpath('//ul/li'):
+
+            yield {'title': sel.xpath('a/text()').extract()}#,
+                   #'link': sel.xpath('a/@href').extract(),
+                   #'desc': sel.xpath('text()').extract()}
+
+    '''      
+    '''
+    def parse(self, response):
+        filename = response.url.split("/")[-2] + '.html'
+        with open(filename, 'wb') as f:
+            f.write(response.body)
+    '''
+    
+if __name__ == '__main__':
+    import os
+    l = os.listdir(r'D:\02_BOMs')
+    lf = []
+    for f in l:
+        if f[-3:] == 'HTM':
+            lf.append(f)
+          
+    
+    #process = CrawlerProcess({
+    #        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+    #    }) 
+    process = CrawlerProcess(get_project_settings())   
+    process.crawl(BsSpider(),PN=lf)
+    process.start() # the script will block here until the crawling is finished
