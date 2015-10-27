@@ -14,7 +14,51 @@ BOT_NAME = 'pjs'
 SPIDER_MODULES = ['pjs.spiders']
 NEWSPIDER_MODULE = 'pjs.spiders'
 
+ITEM_PIPELINES = {
+       'pjs.pipelines.BsPipeline': 10,
+       #'pjs.pipelines.BsPipeline2': 30,
+       #'pjs.pipelines.DuplicatesPipeline':20,
+       #'pjs.pipelines.JsonWriterPipeline':1
+   }
 
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0)Gecko/20100101 Firefox/38.0;Mozilla Firefox 38.2.0 - 10792--72'
+'''
+# Retry many times since proxies often fail
+RETRY_TIMES = 1
+# Retry on most error codes since proxies fail for different reasons
+RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
+
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 90,
+    # Fix path to this module
+    'pjs.randomproxy.RandomProxy': 100,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+}
+
+# Proxy list containing entries like
+# http://host1:port
+# http://username:password@host2:port
+# http://host3:port
+# ...
+PROXY_LIST = r'C:\list.txt'
+
+'''
+
+CONCURRENT_ITEMS = 100
+#Default: 100
+#Maximum number of concurrent items (per response) to process in parallel in the Item Processor (also known as the Item Pipeline).
+CONCURRENT_REQUESTS = 16
+#Default: 16
+#The maximum number of concurrent (ie. simultaneous) requests that will be performed by the Scrapy downloader.
+CONCURRENT_REQUESTS_PER_DOMAIN = 8
+#Default: 8
+#The maximum number of concurrent (ie. simultaneous) requests that will be performed to any single domain.
+CONCURRENT_REQUESTS_PER_IP = 0
+#Default: 0
+#The maximum number of concurrent (ie. simultaneous) requests that will be performed to any single IP. If non-zero, the CONCURRENT_REQUESTS_PER_DOMAIN setting is ignored, and this one is used instead. In other words, concurrency limits will be applied per IP, not per domain.
+#This setting also affects DOWNLOAD_DELAY: if CONCURRENT_REQUESTS_PER_IP is non-zero, download delay is enforced per IP, not per domain.
+
+##########################################################################################
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'pjs (+http://www.yourdomain.com)'
 
