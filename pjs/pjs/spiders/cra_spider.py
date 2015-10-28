@@ -7,21 +7,20 @@ from scrapy.crawler import CrawlerProcess
 
 class CrSpider(CrawlSpider):
     name = 'cr'
-    #allowed_domains = ['example.com']
-    start_urls = ['file:///D:/02_BOMs/test.HTM']
+    allowed_domains = ['eastmoney.com']
+    start_urls = ['http://guba.eastmoney.com/list,600596.html']
 
     rules = (
-        Rule(LinkExtractor(allow=('Index.htm'))),
-        Rule(LinkExtractor(allow=('.HTM', )), callback='parse_item'),
+        Rule(LinkExtractor(allow=('600596_2.html'))),
+        #Rule(LinkExtractor(allow=('default_\d+.html'))),
+        #Rule(LinkExtractor(allow=('list,600596_\d+\.html',))),
+        Rule(LinkExtractor(allow=('news,600596,\d{9}\.html', )), callback='parse_item'),
     )
-    
+    #//div[ngbglistdiv]/ul[@ngblistul2]/li/@href 
+    #<a href="topic,600000.html">(600000)浦发银行</a>
     def parse_item(self, response):
         #self.logger.info('Hi, this is an item page! %s', response.url)
-        #print response.url
-        return {'SAPPart':response.xpath('//nobr[@id="l0003022"]/text()').extract_first(),
-               'Desc' :response.xpath('//nobr[@id="l0004022"]/text()').extract_first()
-               }
-
+        return { 'LINK': response.url}
 
  
 if __name__ == '__main__':

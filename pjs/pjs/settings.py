@@ -13,10 +13,10 @@ BOT_NAME = 'pjs'
 
 SPIDER_MODULES = ['pjs.spiders']
 NEWSPIDER_MODULE = 'pjs.spiders'
+#DEFAULT_ITEM_CLASS = 'pjs.items.SapItem' 
 
 ITEM_PIPELINES = {
        'pjs.pipelines.BsPipeline': 10,
-       #'pjs.pipelines.BsPipeline2': 30,
        #'pjs.pipelines.DuplicatesPipeline':20,
        #'pjs.pipelines.JsonWriterPipeline':1
    }
@@ -43,6 +43,7 @@ DOWNLOADER_MIDDLEWARES = {
 PROXY_LIST = r'C:\list.txt'
 
 '''
+#DEPTH_LIMIT = 0
 
 CONCURRENT_ITEMS = 100
 #Default: 100

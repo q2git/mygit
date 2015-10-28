@@ -56,15 +56,10 @@ class BsPipeline(object):
        self.file = open('temp.txt', 'wb')
        
     def process_item(self, item, spider):
-        self.file.write(item['SAPPart'].split()[0].strip()+'-->'+item['Desc'].strip()+ "\r\n")
+        self.file.write(str(item)+'\r\n')
         return item
         
-        
-class BsPipeline2(object):
-    def process_item(self, item, spider):
-        with open('temp1.txt', 'ab') as f:
-            f.writelines(str(item)+ "\r\n")
-        return item
+
 
 import json
 

@@ -1,27 +1,31 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from scrapy.crawler import CrawlerProcess
-from scrapy.utils.project import get_project_settings
-from scrapy.loader import ItemLoader
-from scrapy.loader.processors import TakeFirst, MapCompose, Join
+#from scrapy.crawler import CrawlerProcess
+#from scrapy.utils.project import get_project_settings
+#from scrapy.loader import ItemLoader
+#from scrapy.loader.processors import TakeFirst, MapCompose, Join
 
-from pjs.items import SapItem
+from pjs.items import PjsItem
 
 class BsSpider(scrapy.Spider):
     name = "bs"
-    allowed_domains = ['dmoz.org']
+    allowed_domains = ['eastmoney.com']
 
-    #start_urls = [
+    start_urls = [
     #    "file:///D:/02_BOMs/BACKUP/Index.htm",
-        #"http://www.dmoz.org/Computers/Programming/Languages/Python/",
-    #]
-    #'''
+        "http://guba.eastmoney.com/list,600596_2.html",
+    ]
+    '''
     def __init__(self, PN=[], *args, **kwargs):
             super(BsSpider, self).__init__(*args, **kwargs)
             for item in PN:
                 self.start_urls.append('file:///D:/02_BOMs/%s' % item)
-            
+    '''
+        
     def parse(self,response):
+        with open('tmp.html','wb') as f:
+            f.write(response.body)
+        '''
         l = ItemLoader(item=SapItem(), response=response)
         l.add_xpath('SAPPart','//nobr[@id="l0003022"]/text()')
         l.add_xpath('Desc','//nobr[@id="l0004022"]/text()')
@@ -42,7 +46,7 @@ class BsSpider(scrapy.Spider):
                'Desc' :response.xpath('//nobr[@id="l0004022"]/text()').extract()
                }
 
-    #'''
+    '''
  
     ''' 
     def parse(self, response):
@@ -65,19 +69,21 @@ class BsSpider(scrapy.Spider):
         with open(filename, 'wb') as f:
             f.write(response.body)
     '''
-    
+  
 if __name__ == '__main__':
+
+    '''
     import os
     l = os.listdir(r'D:\02_BOMs')
     lf = []
     for f in l:
         if f[-3:] == 'HTM':
             lf.append(f)
-          
-    
+    '''
     #process = CrawlerProcess({
     #        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     #    }) 
     process = CrawlerProcess(get_project_settings())   
-    process.crawl(BsSpider(),PN=lf)
+    process.crawl(BsSpider)
     process.start() # the script will block here until the crawling is finished
+
