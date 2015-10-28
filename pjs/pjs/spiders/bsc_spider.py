@@ -5,7 +5,7 @@ from scrapy.utils.project import get_project_settings
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, MapCompose, Join
 
-from pjs.items import SapItem
+#from pjs.items import SapItem
 
 class BsSpider(scrapy.Spider):
     name = "bs"
@@ -67,6 +67,15 @@ class BsSpider(scrapy.Spider):
     '''
     
 if __name__ == '__main__':
+    #for fixing import error    
+    if __package__ is None:
+        import sys
+        from os import path
+        sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
+        from items import SapItem
+    else:
+        from pjs.items import SapItem
+        
     import os
     l = os.listdir(r'D:\02_BOMs')
     lf = []
