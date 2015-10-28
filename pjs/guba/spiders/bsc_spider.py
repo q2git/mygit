@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import codecs
 import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
@@ -13,7 +14,7 @@ class BsSpider(scrapy.Spider):
 
     start_urls = [
     #    "file:///D:/02_BOMs/BACKUP/Index.htm",
-        "http://guba.eastmoney.com/list,600596_2.html",
+        "http://guba.eastmoney.com/news,600596,189798600.html",
     ]
     '''
     def __init__(self, PN=[], *args, **kwargs):
@@ -23,7 +24,7 @@ class BsSpider(scrapy.Spider):
     '''
         
     def parse(self,response):
-        with open('tmp.html','wb') as f:
+        with codecs.open('tmp.html','wb','utf_8_sig') as f:
             f.write(response.body)
         '''
         l = ItemLoader(item=SapItem(), response=response)
@@ -90,7 +91,7 @@ if __name__ == '__main__':
     #process = CrawlerProcess({
     #        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     #    }) 
-    process = CrawlerProcess() #get_project_settings())   
+    process = CrawlerProcess(get_project_settings())   
     process.crawl(BsSpider)
     process.start() # the script will block here until the crawling is finished
 
