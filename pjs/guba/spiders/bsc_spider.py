@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 import scrapy
-#from scrapy.crawler import CrawlerProcess
-#from scrapy.utils.project import get_project_settings
-#from scrapy.loader import ItemLoader
-#from scrapy.loader.processors import TakeFirst, MapCompose, Join
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
+from scrapy.loader import ItemLoader
+from scrapy.loader.processors import TakeFirst, MapCompose, Join
 
-<<<<<<< HEAD
-from pjs.items import PjsItem
-=======
 #from pjs.items import SapItem
->>>>>>> 94618158c58c5a8312ab15bd5aa46696db97f729
 
 class BsSpider(scrapy.Spider):
     name = "bs"
@@ -75,10 +71,6 @@ class BsSpider(scrapy.Spider):
     '''
   
 if __name__ == '__main__':
-<<<<<<< HEAD
-
-    '''
-=======
     #for fixing import error    
     if __package__ is None:
         import sys
@@ -86,9 +78,8 @@ if __name__ == '__main__':
         sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
         from items import SapItem
     else:
-        from pjs.items import SapItem
-        
->>>>>>> 94618158c58c5a8312ab15bd5aa46696db97f729
+        from guba.items import SapItem
+    '''    
     import os
     l = os.listdir(r'D:\02_BOMs')
     lf = []
@@ -99,7 +90,7 @@ if __name__ == '__main__':
     #process = CrawlerProcess({
     #        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
     #    }) 
-    process = CrawlerProcess(get_project_settings())   
+    process = CrawlerProcess() #get_project_settings())   
     process.crawl(BsSpider)
     process.start() # the script will block here until the crawling is finished
 

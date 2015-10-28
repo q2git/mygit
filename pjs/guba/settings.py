@@ -9,16 +9,16 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'pjs'
+BOT_NAME = 'guba'
 
-SPIDER_MODULES = ['pjs.spiders']
-NEWSPIDER_MODULE = 'pjs.spiders'
+SPIDER_MODULES = ['guba.spiders']
+NEWSPIDER_MODULE = 'guba.spiders'
 #DEFAULT_ITEM_CLASS = 'pjs.items.SapItem' 
 
 ITEM_PIPELINES = {
-       'pjs.pipelines.BsPipeline': 10,
-       #'pjs.pipelines.DuplicatesPipeline':20,
-       #'pjs.pipelines.JsonWriterPipeline':1
+       'guba.pipelines.BsPipeline': 10,
+       #'guba.pipelines.DuplicatesPipeline':20,
+       #'guba.pipelines.JsonWriterPipeline':1
    }
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0)Gecko/20100101 Firefox/38.0;Mozilla Firefox 38.2.0 - 10792--72'
@@ -31,7 +31,7 @@ RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.retry.RetryMiddleware': 90,
     # Fix path to this module
-    'pjs.randomproxy.RandomProxy': 100,
+    'guba.randomproxy.RandomProxy': 100,
     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
 }
 
