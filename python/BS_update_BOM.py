@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Oct 28 12:02:26 2015
-
-@author: qic3zhu
 """
 import glob, codecs, types, os, time
 import pyodbc
@@ -168,4 +166,8 @@ Screen SAPLSMTR_NAVIGATION.0100
 // Log Off 
 Screen SAPLSPO1.0100
   Enter "=YES"  
+'''
+#CopyToServer.BAT
+'''
+copy "D:\02_BOMs\*.HTM"  "\\10.54.152.14\Test pro\RepairData\Temp\BOMs\" & Move "D:\02_BOMs\*.HTM" "D:\02_BOMs\BACKUP"
 '''
