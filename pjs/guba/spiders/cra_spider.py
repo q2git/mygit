@@ -8,8 +8,8 @@ from scrapy.crawler import CrawlerProcess
 class CrSpider(CrawlSpider):
     name = 'cr'
     allowed_domains = ['eastmoney.com']
-    #start_urls = ['http://guba.eastmoney.com/list,600596.html']
-    start_urls = map(lambda x:'http://guba.eastmoney.com/list,600596_%d.html'%x,range(1,2))
+    #start_urls = ['http://guba.eastmoney.com/news,600596,209423368.html']
+    start_urls = map(lambda x:'http://guba.eastmoney.com/list,600596_%d.html'%x,range(1,50))
     rules = (
         #Rule(LinkExtractor(allow=('default_\d+.html'))),
         #Rule(LinkExtractor(allow=('list,600596_\d+\.html',))),
@@ -23,9 +23,12 @@ class CrSpider(CrawlSpider):
         #return { 'LINK': response.url} |@id='zwlianame' |@id='zwlitime'
         #{'ID':response.xpath("//div[@id='zwconttbn']//text()").extract(),
         #       'Date':response.xpath("//div[@class='zwfbtime']/text()").extract()}
-        for sel in response.xpath("//div[@id='zwlist']"):
-            yield{'ID':response.xpath("//div[@id='zwlianame']//text()").extract(),
-                  'Date':response.xpath("//div[@class='zwlitime']/text()").extract()}
+        for sel in response.xpath("//div[@class='zwli clearfix']|//div[@id='zwconttb']"):
+            ID = sel.xpath(".//span[@class='zwnick']//text()|\
+            .//div[@id='zwconttbn']//text()").extract_first()
+            Date = sel.xpath(".//div[@class='zwlitime']/text()|\
+            .//div[@class='zwfbtime']/text()").re_first('\d{4}-\d{2}-\d{2}')
+            yield {'ID':ID,'Date':Date}
  
 if __name__ == '__main__':
     process = CrawlerProcess(get_project_settings())   

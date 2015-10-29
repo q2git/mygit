@@ -58,8 +58,9 @@ class BsPipeline(object):
     def process_item(self, item, spider):
         #item = list(item)
         #item=''.join(item)
-        self.file.write(str(item)+'\r\n')
-        #self.file.write(item['ID'][0]+' '+item['Date'][0]+'\r\n')
+        self.file.write(str(item['ID'])+':'+str(item['Date'])+'\r\n')
+        #for data in item['Data']:
+        #    self.file.write(data+'\r\n')
         return item
         
 

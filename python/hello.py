@@ -1,15 +1,9 @@
-
-import web
-
-urls =('/(.*)','hello')
-
-app = web.application(urls,globals())
-
-class hello:
-    def GET(sefl,name):
-        if not name:
-            name = 'World'
-        return 'Hello, ' + name + '!'
+item={}
+def x():
+    for i in range(10):
+        yield {item['a']:(i,i+1),item['b']:i*3}
     
-if __name__ == '__main__':
-    #app.run()
+a= x()
+
+for i in a:
+    print i[0]
