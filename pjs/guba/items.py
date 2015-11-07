@@ -13,7 +13,7 @@ class PjsItem(scrapy.Item):
     # name = scrapy.Field()
     pass
 
-class SapItem(scrapy.Item):
-    SAPPart = scrapy.Field()
-    Desc = scrapy.Field()
-    
+class GubaItem(scrapy.Item):
+    Stock = scrapy.Field()
+    ID = scrapy.Field()
+    Date = scrapy.Field()
