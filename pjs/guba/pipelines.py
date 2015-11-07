@@ -11,7 +11,7 @@ from scrapy import signals
 from scrapy.xlib.pydispatch import dispatcher
 
 class SQLiteStorePipeline(object):
-    filename = 'data.db'
+    filename = '../../stock.db'
 
     def __init__(self):
         self.conn = None
@@ -19,8 +19,8 @@ class SQLiteStorePipeline(object):
         dispatcher.connect(self.finalize, signals.engine_stopped)
 
     def process_item(self, item, spider):
-        self.conn.execute('insert into TGB values(?,?,?)',
-                          (''.join(item['link']),''.join(item['title']),''.join(item['content'])))
+        self.conn.execute('insert into guba values(?,?,?)',
+                          (item['Stock'],item['ID'],item['Date']))
         return item
 
     def initialize(self):
@@ -37,8 +37,8 @@ class SQLiteStorePipeline(object):
 
     def create_table(self, filename):
         conn = sqlite3.connect(filename)
-        conn.execute("""create table TGB
-                     (url text, title text,content text)""")
+        conn.execute("""create table guba
+                     (Stock text, ID text,Date datetime)""")
         conn.commit()
         return conn
         
@@ -53,12 +53,13 @@ class SQLiteStorePipeline(object):
 
 class BsPipeline(object):
     def __init__(self):
-       self.file = open('temp.txt', 'wb')
+        import codecs
+        self.file = codecs.open('../../temp.txt', 'wb','utf_8_sig')
        
     def process_item(self, item, spider):
         #item = list(item)
         #item=''.join(item)
-        self.file.write(str(item['ID'])+':'+str(item['Date'])+'\r\n')
+        self.file.write(item['Stock']+' '+item['ID']+' '+item['Date']+'\r\n')
         #for data in item['Data']:
         #    self.file.write(data+'\r\n')
         return item
