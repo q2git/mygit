@@ -1,9 +1,7 @@
-item={}
-def x():
-    for i in range(10):
-        yield {item['a']:(i,i+1),item['b']:i*3}
-    
-a= x()
+import urllib2
+import codecs
 
-for i in a:
-    print i[0]
+response = urllib2.urlopen('http://guba.eastmoney.com/list,600596.html')
+data = response.read()
+with codecs.open('test.html','wb') as f:
+    f.write(data)

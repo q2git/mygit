@@ -10,8 +10,45 @@ from os import path
 from scrapy import signals
 from scrapy.xlib.pydispatch import dispatcher
 
+#Access========================================================
+import pyodbc 
+class AccessPipeline(object):
+    filename = '../../stock.accdb'
+    strConn = "DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=%s" %(filename)
+    def __init__(self):
+        self.conn = None
+        dispatcher.connect(self.open_conn, signals.engine_started)
+        dispatcher.connect(self.close_conn, signals.engine_stopped)
+
+    def process_item(self, item, spider):
+        self.conn.execute('insert into guba values(?,?,?)',tuple(item.values()))
+                          #(item['Stock'],item['ID'],item['Date']))
+        return item
+
+    def open_conn(self):
+        conn = pyodbc.connect(self.strConn)
+        conn.autocommit = True
+        table = '''create table guba(
+            [Stock] text(10),
+            [ID] text(50),
+            [Date] DateTime 
+            )'''
+        try:
+            conn.execute(table)
+        except:
+            pass
+        #conn.commit()
+        self.conn = conn
+
+    def close_conn(self):
+        if self.conn is not None:
+            #self.conn.commit()
+            self.conn.close()
+            self.conn = None
+        
+#sqlite====================================================== 
 class SQLiteStorePipeline(object):
-    filename = '../../stock.db'
+    filename = '../../stock.sqlite'
 
     def __init__(self):
         self.conn = None
@@ -41,31 +78,21 @@ class SQLiteStorePipeline(object):
                      (Stock text, ID text,Date datetime)""")
         conn.commit()
         return conn
-        
-        
-# -*- coding: utf-8 -*-
 
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-
-
+#text file
+import codecs
 class BsPipeline(object):
     def __init__(self):
-        import codecs
         self.file = codecs.open('../../temp.txt', 'wb','utf_8_sig')
-       
+        
     def process_item(self, item, spider):
-        #item = list(item)
         #item=''.join(item)
-        self.file.write(item['Stock']+' '+item['ID']+' '+item['Date']+'\r\n')
+        self.file.write(item['Stock']+','+item['ID']+','+item['Date']+'\r\n')
         #for data in item['Data']:
         #    self.file.write(data+'\r\n')
         return item
-        
 
-
+#json
 import json
 
 class JsonWriterPipeline(object):

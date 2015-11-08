@@ -14,11 +14,11 @@ BOT_NAME = 'guba'
 SPIDER_MODULES = ['guba.spiders']
 NEWSPIDER_MODULE = 'guba.spiders'
 #DEFAULT_ITEM_CLASS = 'pjs.items.SapItem' 
-
 ITEM_PIPELINES = {
-       'guba.pipelines.BsPipeline': 10,
+       #'guba.pipelines.BsPipeline': 10,
        #'guba.pipelines.DuplicatesPipeline':20,
-       'guba.pipelines.SQLiteStorePipeline':1
+       'guba.pipelines.AccessPipeline':20,
+       #'guba.pipelines.SQLiteStorePipeline':1
    }
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0)Gecko/20100101 Firefox/38.0;Mozilla Firefox 38.2.0 - 10792--72'
@@ -27,14 +27,14 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0)Gecko/20100101 Firefox
 RETRY_TIMES = 1
 # Retry on most error codes since proxies fail for different reasons
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
-
+'''
 DOWNLOADER_MIDDLEWARES = {
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 90,
-    # Fix path to this module
-    'guba.randomproxy.RandomProxy': 100,
-    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    #'scrapy.downloadermiddlewares.retry.RetryMiddleware': 90,
+    #'scrapyjs.SplashMiddleware': 725,
+    #'guba.randomproxy.RandomProxy': 100,
+    #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
 }
-
+'''
 # Proxy list containing entries like
 # http://host1:port
 # http://username:password@host2:port

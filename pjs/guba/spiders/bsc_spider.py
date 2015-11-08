@@ -14,7 +14,7 @@ class BsSpider(scrapy.Spider):
 
     start_urls = [
     #    "file:///D:/02_BOMs/BACKUP/Index.htm",
-        "http://guba.eastmoney.com/news,600596,189798600.html",
+        "http://quote.eastmoney.com/sh600596.html",
     ]
     '''
     def __init__(self, PN=[], *args, **kwargs):
@@ -24,7 +24,7 @@ class BsSpider(scrapy.Spider):
     '''
         
     def parse(self,response):
-        with codecs.open('tmp.html','wb','utf_8_sig') as f:
+        with codecs.open('../../tmp.html','wb') as f:
             f.write(response.body)
         '''
         l = ItemLoader(item=SapItem(), response=response)
@@ -77,9 +77,9 @@ if __name__ == '__main__':
         import sys
         from os import path
         sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
-        from items import SapItem
+        from items import GubaItem
     else:
-        from guba.items import SapItem
+        from guba.items import GubaItem
     '''    
     import os
     l = os.listdir(r'D:\02_BOMs')

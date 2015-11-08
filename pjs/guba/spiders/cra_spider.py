@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#import scrapy
+import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.utils.project import get_project_settings
@@ -8,16 +8,28 @@ from scrapy.crawler import CrawlerProcess
 class CrSpider(CrawlSpider):
     name = 'cr'
     allowed_domains = ['eastmoney.com']
-    #start_urls = ['http://guba.eastmoney.com/news,600596,209423368.html']
-    start_urls = map(lambda x:'http://guba.eastmoney.com/list,002425_%d.html'%x,range(1,163))
+    start_urls = []
+    #start_urls = ['http://guba.eastmoney.com/list,600596.html']
+    #start_urls = map(lambda x:'http://guba.eastmoney.com/list,%s.html'%x.strip(),open('sz.txt','rb').readlines())
+    #start_urls = map(lambda x:'http://guba.eastmoney.com/list,002425_%d.html'%x,range(1,2))
     rules = (
-        #Rule(LinkExtractor(allow=('default_\d+.html'))),
-        #Rule(LinkExtractor(allow=('list,600596_\d+\.html',))),
+        #Rule(LinkExtractor(allow=('list,\d{6}\.html')),callback='get_pages'),
+        #Rule(LinkExtractor(allow=('list,\d{6}\.html',))),
         Rule(LinkExtractor(allow=('news,\d{6},\d+\.html', )), callback='parse_item'),
     )
-    #//div[ngbglistdiv]/ul[@ngblistul2]/li/@href 
-    #<a href="topic,600000.html">(600000)浦发银行</a>
+    
+    def __init__(self, *args, **kwargs):
+        super(CrSpider, self).__init__(*args, **kwargs)
+        urls = map(lambda x:'http://guba.eastmoney.com/list,%s_'%x.strip(),open('sz.txt','rb').readlines())
+        for x in urls:
+            for y in range(1,10):
+                self.start_urls.append(x+str(y)+'.html')
             
+    def get_pages(self,response):
+        articles = response.xpath("//div[@class='pager']/text()").re_first('\d+')
+        print articles,int(articles)/80
+
+        
     def parse_item(self, response):
         x = GubaItem()
         x['Stock'] = response.url.split(',')[1]
@@ -30,6 +42,7 @@ class CrSpider(CrawlSpider):
             x['Date'] = sel.xpath(".//div[@class='zwlitime']/text()|\
             .//div[@class='zwfbtime']/text()").re_first('\d{4}-\d{2}-\d{2}')
             yield x #{'Stock':Stock,'ID':ID,'Date':Date}
+
  
 if __name__ == '__main__':
         #for fixing import error    
