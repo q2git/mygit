@@ -54,7 +54,7 @@ def GetGubaItems(q_urls,q_items,lock):
         data = (stock,price,people,article,date)
         q_items.put(data)
         with lock:
-            print 'PID%s:%s %s left'%(os.getpid(),data,q_urls.qsize()-1)
+            print 'PID%s:%s %s left'%(os.getpid(),data,q_urls.qsize())
     driver.close()
     
 def Urls2Que(q_urls):
