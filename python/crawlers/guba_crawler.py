@@ -41,7 +41,7 @@ def WriteTxt(q_items):
 def GetGubaItems(q_urls,q_items,lock):
     driver = webdriver.PhantomJS()
     while 1:
-        url = q_urls.get()
+        url = q_urls.get(timeout=3)
         if url == None:q_urls.put(None);break
         driver.get(url)
         html = driver.page_source
