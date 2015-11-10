@@ -40,23 +40,33 @@ def WriteTxt(q_items):
 #######################################
 def GetGubaItems(q_urls,q_items,lock):
     driver = webdriver.PhantomJS()
+    driver.set_page_load_timeout(30)  
     while 1:
         url = q_urls.get(timeout=3)
         if url == None or q_urls.empty():q_urls.put(None);break
-        driver.get(url)
-        html = driver.page_source
-        soup = BeautifulSoup(html,'lxml') 
-        stock = soup.find('span',attrs={'id':'stockheadercode'}).get_text()[1:7]
-        price = soup.find('span',attrs={'id':'hqprice'}).get_text()
-        people = re.match('\d+',soup.find('span',attrs={'id':'stockifm'}).get_text()).group()
-        article = soup.find('div',attrs={'class':'pager'}).get_text().split(' ')[1]
-        date =  time.strftime("%Y-%m-%d",time.localtime(time.time()))
-        data = (stock,price,people,article,date)
-        q_items.put(data)
-        with lock:
-            print 'PID%s:%s %s left'%(os.getpid(),data,q_urls.qsize())
+        retry_cnt = 0
+        while retry_cnt<2:
+            try:
+                driver.get(url)
+                html = driver.page_source
+                soup = BeautifulSoup(html,'lxml') 
+                stock = soup.find('span',attrs={'id':'stockheadercode'}).get_text()[1:7]
+                price = soup.find('span',attrs={'id':'hqprice'}).get_text()
+                people = re.match('\d+',soup.find('span',attrs={'id':'stockifm'}).get_text()).group()
+                article = soup.find('div',attrs={'class':'pager'}).get_text().split(' ')[1]
+                date =  time.strftime("%Y-%m-%d",time.localtime(time.time()))
+                data = (stock,price,people,article,date)
+                q_items.put(data)
+                with lock:
+                    print 'PID%s:%s %s left'%(os.getpid(),data,q_urls.qsize())
+                break
+            except:
+                print 'Retrying-%s: %s...'%(retry_cnt,url)
+                driver.refresh()
+            retry_cnt += 1
     driver.close()
     
+#######################################    
 def Urls2Que(q_urls):
     print 'Putting urls into [q_urls]...',
     stkids = map(lambda x:x.strip(),open('sz.txt','rb').readlines())
