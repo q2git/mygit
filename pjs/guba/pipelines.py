@@ -31,7 +31,7 @@ class AccessPipeline(object):
         table = '''create table guba(
             [Stock] text(10),
             [ID] text(50),
-            [Date] DateTime 
+            [Date] text(10) 
             )'''
         try:
             conn.execute(table)

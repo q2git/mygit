@@ -14,7 +14,7 @@ class BsSpider(scrapy.Spider):
 
     start_urls = [
     #    "file:///D:/02_BOMs/BACKUP/Index.htm",
-        "http://quote.eastmoney.com/sh600596.html",
+        "http://guba.eastmoney.com/news,600596,210027504.html",
     ]
     '''
     def __init__(self, PN=[], *args, **kwargs):

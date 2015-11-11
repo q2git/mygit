@@ -1,4 +1,3 @@
-
 #processing files and images
 1.~spider.py
 {'image_urls': [img_link], 'file_urls' = [file_link]}
@@ -9,3 +8,9 @@ ITEM_PIPELINES = {
        'scrapy.pipelines.files.FilesPipeline': 2 }
 FILES_STORE = '../path'
 IMAGES_STORE = '../path'
+
+#~spider.py 
+Rule(LinkExtractor(allow=('list,'+stkid+'_\d+\.html'),
+     restrict_xpaths=("//div[@class='articleh' and span[6][starts-with(.,'11-11')]]/span[3]"),
+     #restrict_xpaths=("//div[contains(@class,'articleh') and span[5]='11-09']/span[3]"),
+     process_value=pvalue))

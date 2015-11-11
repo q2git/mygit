@@ -15,9 +15,9 @@ SPIDER_MODULES = ['guba.spiders']
 NEWSPIDER_MODULE = 'guba.spiders'
 #DEFAULT_ITEM_CLASS = 'pjs.items.SapItem' 
 ITEM_PIPELINES = {
-       #'guba.pipelines.BsPipeline': 10,
+       'guba.pipelines.BsPipeline': 10,
        #'guba.pipelines.DuplicatesPipeline':20,
-       'guba.pipelines.AccessPipeline':20,
+       #'guba.pipelines.AccessPipeline':20,
        #'guba.pipelines.SQLiteStorePipeline':1
    }
 
@@ -45,13 +45,13 @@ PROXY_LIST = r'C:\list.txt'
 '''
 #DEPTH_LIMIT = 0
 
-CONCURRENT_ITEMS = 200
+CONCURRENT_ITEMS = 100
 #Default: 100
 #Maximum number of concurrent items (per response) to process in parallel in the Item Processor (also known as the Item Pipeline).
-CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 16
 #Default: 16
 #The maximum number of concurrent (ie. simultaneous) requests that will be performed by the Scrapy downloader.
-CONCURRENT_REQUESTS_PER_DOMAIN = 16
+CONCURRENT_REQUESTS_PER_DOMAIN = 8
 #Default: 8
 #The maximum number of concurrent (ie. simultaneous) requests that will be performed to any single domain.
 CONCURRENT_REQUESTS_PER_IP = 0
