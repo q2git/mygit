@@ -4,7 +4,7 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-import sqlite3
+import sqlite3,codecs
 from os import path
 
 from scrapy import signals
@@ -91,6 +91,9 @@ class BsPipeline(object):
         #for data in item['Data']:
         #    self.file.write(data+'\r\n')
         return item
+    
+    def spider_closed(self, spider):
+        self.file.close()
 
 #json
 import json
@@ -120,4 +123,35 @@ class DuplicatesPipeline(object):
             self.ids_seen.add(item['title'][0])
             return item
  
-     
+##########################################
+class TxtPipeline(object):
+    def __init__(self):
+        self.files = {}
+        
+    @classmethod
+    def from_crawler(cls, crawler):
+        pipeline = cls()
+        crawler.signals.connect(pipeline.spider_opened, signals.spider_opened)
+        crawler.signals.connect(pipeline.spider_closed, signals.spider_closed)
+        return pipeline
+
+    def spider_opened(self, spider):
+        pass
+        #file = open('%s.txt' % spider.name, 'wb')
+        #self.files[spider] = file
+    
+    def spider_closed(self, spider):
+        for i in self.files:
+            file = self.files.pop(i)
+            file.close()
+
+    def process_item(self, item, spider):
+        fn = item['Stock']
+        if not fn in self.files: # and hasattr(self.files[fn],'write')
+            self.files[fn] = codecs.open('../../%s.csv' % fn, 'wb', 'utf_8_sig')
+            data = ','.join(item.keys())
+            self.files[fn].write(data+'\r\n')
+
+        data = ','.join(item.values())
+        self.files[fn].write(data+'\r\n')
+        return item    

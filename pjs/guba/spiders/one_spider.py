@@ -16,15 +16,15 @@ class CrSpider(CrawlSpider):
 
     rules = (
         #Rule(LinkExtractor(allow=('list,'+stkid+'\.html')),callback='get_pages'),
-        Rule(LinkExtractor(allow=('list,'+stkid+'_\d+\.html'),
-             restrict_xpaths=("//div[@class='articleh' and span[6][starts-with(.,'11-11')]]/span[3]"),
-             process_value=pvalue)),                        
+        #Rule(LinkExtractor(allow=('list,'+stkid+'_\d+\.html'),
+        #     restrict_xpaths=("//div[@class='articleh' and span[6][starts-with(.,'11-11')]]/span[3]"),
+        #     process_value=pvalue)),                        
         Rule(LinkExtractor(allow=('news,'+stkid+',\d+\.html', )), callback='parse_item'),
     )
     def __init__(self, *args, **kwargs):
         super(CrSpider, self).__init__(*args, **kwargs)
         self.start_urls = map(lambda x:'http://guba.eastmoney.com/list,%s_%d.html'
-                         %(self.stkid,x),range(1,10))
+                         %(self.stkid,x),range(1,50))
 
     def get_pages(self,response):
         articles = response.xpath("//div[@class='pager']/text()").re_first('\d+')
@@ -53,8 +53,8 @@ class CrSpider(CrawlSpider):
             .//div[@id='zwconttbn']//text()").extract_first()
             x['Date'] = sel.xpath(".//div[@class='zwlitime']/text()|\
             .//div[@class='zwfbtime']/text()").re_first('\d{4}-\d{2}-\d{2}')
-            yield x #{'Stock':Stock,'ID':ID,'Date':Date}
- 
+            yield x #{'Stock':Stock,'ID':ID,'Date':Date}           
+        
 if __name__ == '__main__':
         #for fixing import error    
     if __package__ is None:

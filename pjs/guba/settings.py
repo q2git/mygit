@@ -15,7 +15,8 @@ SPIDER_MODULES = ['guba.spiders']
 NEWSPIDER_MODULE = 'guba.spiders'
 #DEFAULT_ITEM_CLASS = 'pjs.items.SapItem' 
 ITEM_PIPELINES = {
-       'guba.pipelines.BsPipeline': 10,
+       #'guba.pipelines.BsPipeline': 10,
+       'guba.pipelines.TxtPipeline': 5,
        #'guba.pipelines.DuplicatesPipeline':20,
        #'guba.pipelines.AccessPipeline':20,
        #'guba.pipelines.SQLiteStorePipeline':1

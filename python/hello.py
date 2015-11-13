@@ -1,7 +1,11 @@
-import urllib2
-import codecs
+import qrcode
+qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+)
+qr.add_data('Some data')
+qr.make(fit=True)
 
-response = urllib2.urlopen('http://guba.eastmoney.com/list,600596.html')
-data = response.read()
-with codecs.open('test.html','wb') as f:
-    f.write(data)
+img = qr.make_image()
