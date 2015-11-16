@@ -5,26 +5,26 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.utils.project import get_project_settings
 from scrapy.crawler import CrawlerProcess
 
+
 class CrSpider(CrawlSpider):
     name = 'one'
     allowed_domains = ['eastmoney.com']
-    stkid = '600596'
     #start_urls = ['http://guba.eastmoney.com/list,'+stkid+'.html']
-    def pvalue(value):
-        print value
+    #def pvalue(value):
+        #print value
         #return value
-
-    rules = (
+    def __init__(self, stkpgs, *args, **kwargs):
+        super(CrSpider, self).__init__(*args, **kwargs)
+        self.stkid,self.pages = stkpgs
+        self.start_urls = map(lambda x:'http://guba.eastmoney.com/list,%s_%d.html'
+                         %(self.stkid,x),range(1,self.pages))
+        self.rules = (
         #Rule(LinkExtractor(allow=('list,'+stkid+'\.html')),callback='get_pages'),
         #Rule(LinkExtractor(allow=('list,'+stkid+'_\d+\.html'),
         #     restrict_xpaths=("//div[@class='articleh' and span[6][starts-with(.,'11-11')]]/span[3]"),
         #     process_value=pvalue)),                        
-        Rule(LinkExtractor(allow=('news,'+stkid+',\d+\.html', )), callback='parse_item'),
-    )
-    def __init__(self, *args, **kwargs):
-        super(CrSpider, self).__init__(*args, **kwargs)
-        self.start_urls = map(lambda x:'http://guba.eastmoney.com/list,%s_%d.html'
-                         %(self.stkid,x),range(1,50))
+        Rule(LinkExtractor(allow=('news,'+self.stkid+',\d+\.html', )), callback='parse_item'),
+        )
 
     def get_pages(self,response):
         articles = response.xpath("//div[@class='pager']/text()").re_first('\d+')
@@ -33,7 +33,7 @@ class CrSpider(CrawlSpider):
             yield scrapy.Request(url)
       
     def parse_item(self, response):
-        x = {}
+        x = GubaItem()
         x['Stock'] = response.url.split(',')[1]
         for sel in response.xpath("//div[@class='zwli clearfix']|//div[@id='zwconttb']"):
             x['ID'] = sel.xpath(".//span[@class='zwnick']//text()|\
@@ -42,18 +42,7 @@ class CrSpider(CrawlSpider):
             .//div[@class='zwfbtime']/text()").re_first('\d{4}-\d{2}-\d{2}')
             yield x
 
-    def parse_item2(self, response):
-        x = GubaItem()
-        x['Stock'] = response.url.split(',')[1]
-        #return { 'LINK': response.url} |@id='zwlianame' |@id='zwlitime'
-        #{'ID':response.xpath("//div[@id='zwconttbn']//text()").extract(),
-        #       'Date':response.xpath("//div[@class='zwfbtime']/text()").extract()}
-        for sel in response.xpath("//div[@class='zwli clearfix']|//div[@id='zwconttb']"):
-            x['ID'] = sel.xpath(".//span[@class='zwnick']//text()|\
-            .//div[@id='zwconttbn']//text()").extract_first()
-            x['Date'] = sel.xpath(".//div[@class='zwlitime']/text()|\
-            .//div[@class='zwfbtime']/text()").re_first('\d{4}-\d{2}-\d{2}')
-            yield x #{'Stock':Stock,'ID':ID,'Date':Date}           
+     
         
 if __name__ == '__main__':
         #for fixing import error    
@@ -64,7 +53,9 @@ if __name__ == '__main__':
         from items import GubaItem
     else:
         from guba.items import GubaItem
+    stkid = '600596'#raw_input('please input the stock id:')
+    pages = 100#raw_input('please input the total pages:')
         
     process = CrawlerProcess(get_project_settings())   
-    process.crawl(CrSpider)
+    process.crawl(CrSpider,(stkid,pages))
     process.start() # the script will block here until the crawling is finished

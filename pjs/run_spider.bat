@@ -1,3 +1,3 @@
 cd guba\spiders
-rem python cra_spider.py
+python one_spider.py
 cmd.exe
