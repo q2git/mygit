@@ -53,8 +53,8 @@ if __name__ == '__main__':
         from items import GubaItem
     else:
         from guba.items import GubaItem
-    stkid = '600596'#raw_input('please input the stock id:')
-    pages = 100#raw_input('please input the total pages:')
+    stkid = raw_input('please input the stock id:')
+    pages = int(raw_input('please input the total pages:'))
         
     process = CrawlerProcess(get_project_settings())   
     process.crawl(CrSpider,(stkid,pages))
