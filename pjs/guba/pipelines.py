@@ -80,7 +80,6 @@ class SQLiteStorePipeline(object):
         return conn
 
 #text file
-import codecs
 class BsPipeline(object):
     def __init__(self):
         self.file = codecs.open('../../temp.txt', 'wb','utf_8_sig')
@@ -148,7 +147,7 @@ class TxtPipeline(object):
     def process_item(self, item, spider):
         fn = item['Stock']
         if not fn in self.files: # and hasattr(self.files[fn],'write')
-            self.files[fn] = codecs.open('../../%s.csv' % fn, 'wb', 'utf_8_sig')
+            self.files[fn] = codecs.open('../../%s.csv' % fn, 'wb', 'gb2312')
             data = ','.join(item.keys())
             self.files[fn].write(data+'\r\n')
 

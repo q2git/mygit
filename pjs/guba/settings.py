@@ -22,7 +22,7 @@ ITEM_PIPELINES = {
        #'guba.pipelines.SQLiteStorePipeline':1
    }
    
-DOWNLOAD_HANDLERS = {'S3':None,}
+#DOWNLOAD_HANDLERS = {'S3':None,}
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0)Gecko/20100101 Firefox/38.0;Mozilla Firefox 38.2.0 - 10792--72'
 '''
