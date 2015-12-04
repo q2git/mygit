@@ -66,6 +66,10 @@ class MainWindow(QtGui.QWidget):
         self.initUI()
         
     def initUI(self):
+        self.styles = ["QWidget{ background-color: rgb(168, 255, 168) }" ,
+                    "QWidget{ background-color: rgb(255, 255, 255) }" ,
+                    "QWidget{ background-color: rgb(255, 168, 168) }" ]
+        self.flag = True
         self.que = Queue.Queue()
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.timeout)
@@ -93,13 +97,14 @@ class MainWindow(QtGui.QWidget):
             self.btn.setText('Start Server')
             self.list1.insertItem(0,time.strftime("%Y-%m-%d %H:%M:%S")+' Server Stoped')
         else:
-            self.timer.start(1000*10)
+            self.timer.start(1000)
             self.btn.setText('Stop Server')
             self.list1.insertItem(0,time.strftime("%Y-%m-%d %H:%M:%S")+' Server Started')
 
     def timeout(self):
-        self.list1.setEnabled(not self.list1.isEnabled())
-        self.list2.setEnabled(not self.list1.isEnabled())
+        self.list1.setStyleSheet(self.styles[self.flag])
+        self.flag = not self.flag
+        
         if self.que.qsize() != 0: return #avoid duplication
         try:
             with pyodbc.connect(strConn).cursor() as c:
@@ -112,7 +117,10 @@ class MainWindow(QtGui.QWidget):
                     workers = int((self.que.qsize()-1)/20)+1
                     for x in xrange(workers):
                         Worker(x,self.que,self.list2) 
+            self.timer.setInterval(1000*10)
         except Exception as e:
+            self.list1.setStyleSheet(self.styles[2])
+            self.timer.setInterval(1000*60)
             self.list1.insertItem(0,"%s error:%s"%(time.strftime("%Y-%m-%d %H:%M:%S"),e))
 
 
