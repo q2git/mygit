@@ -66,30 +66,42 @@ class MainWindow(QtGui.QWidget):
         self.initUI()
         
     def initUI(self):
-        self.styles = ["QWidget{ background-color: rgb(168, 255, 168) }" ,
-                    "QWidget{ background-color: rgb(255, 255, 255) }" ,
-                    "QWidget{ background-color: rgb(255, 168, 168) }" ]
-        self.flag = True
+        self.styles = ["QWidget{ background-color: rgb(0, 255, 0) }" ,
+                    "QWidget{ background-color: rgb(255, 255, 0) }" ,
+                    "QWidget{ background-color: rgb(255, 0, 0) }" ]
+        self.count = 0
+        self.flag = False
         self.que = Queue.Queue()
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.timeout)
-    
         self.list1 = QtGui.QListWidget(self)
         self.list2 = QtGui.QListWidget(self)
-        hspliter = QtGui.QSplitter(2,self)
-        hspliter.addWidget(self.list1)
-        hspliter.addWidget(self.list2)
+        self.vspliter = QtGui.QSplitter(2,self)
+        self.vspliter.addWidget(self.list1)
+        self.vspliter.addWidget(self.list2)
+        self.label1 = QtGui.QLabel(self)
+        self.label2 = QtGui.QLabel(self)
         self.btn = QtGui.QPushButton('Start Server')
-        self.btn.setMinimumHeight(50)
+        self.btn.setFixedSize(100,50)
         self.btn.clicked.connect(self.btnClicked)
-        vbox = QtGui.QVBoxLayout(self)
-        vbox.addWidget(hspliter)
-        vbox.addWidget(self.btn)
+
+        layout = QtGui.QGridLayout(self)
+        layout.addWidget(self.vspliter,0,1,1,3)
+        layout.addWidget(self.label1,1,1)
+        layout.addWidget(self.btn,1,2)
+        layout.addWidget(self.label2,1,3)
         
-        self.setLayout(vbox)
+        self.setLayout(layout)
         self.setWindowTitle('Docuement Server')
         self.setGeometry(10,680,500,300)
+        self.setWindowFlags(QtCore.Qt.CustomizeWindowHint|
+                    QtCore.Qt.WindowMinimizeButtonHint|
+                    QtCore.Qt.WindowMaximizeButtonHint)
         self.show()
+        
+    def mousePressEvent(self,event):
+        if event.button()==QtCore.Qt.RightButton and not self.timer.isActive():
+            self.close()
         
     def btnClicked(self):      
         if self.timer.isActive():
@@ -97,14 +109,17 @@ class MainWindow(QtGui.QWidget):
             self.btn.setText('Start Server')
             self.list1.insertItem(0,time.strftime("%Y-%m-%d %H:%M:%S")+' Server Stoped')
         else:
-            self.timer.start(1000)
+            self.timer.start(100)
             self.btn.setText('Stop Server')
             self.list1.insertItem(0,time.strftime("%Y-%m-%d %H:%M:%S")+' Server Started')
 
     def timeout(self):
-        self.list1.setStyleSheet(self.styles[self.flag])
+        self.label1.setStyleSheet(self.styles[self.flag])
         self.flag = not self.flag
-        
+        self.label2.setStyleSheet(self.styles[self.flag])
+        self.count += 1
+        if self.count < 10: return #label flash 10 times
+        self.count = 0
         if self.que.qsize() != 0: return #avoid duplication
         try:
             with pyodbc.connect(strConn).cursor() as c:
@@ -117,10 +132,11 @@ class MainWindow(QtGui.QWidget):
                     workers = int((self.que.qsize()-1)/20)+1
                     for x in xrange(workers):
                         Worker(x,self.que,self.list2) 
-            self.timer.setInterval(1000*10)
+            self.timer.setInterval(1000*1)
         except Exception as e:
-            self.list1.setStyleSheet(self.styles[2])
-            self.timer.setInterval(1000*60)
+            self.label1.setStyleSheet(self.styles[2])
+            self.label2.setStyleSheet(self.styles[2])
+            self.timer.setInterval(1000*6)
             self.list1.insertItem(0,"%s error:%s"%(time.strftime("%Y-%m-%d %H:%M:%S"),e))
 
 
