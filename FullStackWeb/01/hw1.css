@@ -1,0 +1,11 @@
+
+fieldset    {background:lightyellow;border:10px solid yellow;
+            margin-bottom:10px;width:720px;}
+label       {width:180px;display:inline-block;text-align:right;vertical-align:top;}
+label:hover {font-size:40px;}
+input:hover {height:40px;}
+.cr         {width:auto;}
+.rng0       {background:brown;color:white;width:60px;text-align:center;vertical-align:center;}
+.rng1       {background:purple;color:white;width:60px;text-align:center;vertical-align:center;}
+br          {margin-bottom:10px;}
+textarea    {width:360px; height:50px;}
