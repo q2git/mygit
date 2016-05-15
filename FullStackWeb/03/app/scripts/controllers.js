@@ -150,10 +150,9 @@ angular.module('confusionApp')
             var prom= menuFactory.getPromotion(0);
             $scope.promotion = prom;
 			//$scope.dish = menuFactory.getDish(0);
-			//$scope.dish = {};
+			$scope.ck = function(id){alert(id);};
 			$scope.showDish = false;
 			$scope.message="Loading ...";
-			
 			$scope.dish = menuFactory.getDishes().get({id:0})
 			.$promise.then(
 				function(response){
