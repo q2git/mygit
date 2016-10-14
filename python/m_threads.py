@@ -17,7 +17,7 @@ class Producer(threading.Thread):
                 with self.lock:
                     print 'Producer ',self.getName(),'adding',n,'to queue'
                 self.que2.put(n+0.1)
-                time.sleep(1)
+                time.sleep(random.randint(1,3))
             else:               
                 break
             
@@ -40,7 +40,7 @@ class Consumer(threading.Thread):
             if n:
                 with self.lock:
                     print 'Consumer ',self.getName(),' got a value:',n
-                time.sleep(1)
+                time.sleep(random.randint(1,3))
             else:           
                 break
             
@@ -55,15 +55,15 @@ def main():
     que2 = Queue.Queue()
     lock = threading.Lock()
     
-    map(que.put, range(1,10))
+    map(que.put, range(1,20))
     que.put(None) #end tag
     
     ths_p = []
-    for th in xrange(1):
+    for th in xrange(5):
         ths_p.append(Producer(que, que2, lock))
     
     ths_c = []    
-    for th in xrange(1):
+    for th in xrange(5):
         ths_c.append(Consumer(que2, lock))
         
     for th in ths_p:
