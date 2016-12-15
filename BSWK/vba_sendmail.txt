@@ -1,0 +1,82 @@
+Public MYNAME As String
+
+Function GetName()
+    Set WSHnet = CreateObject("WScript.Network")
+    UserName = WSHnet.UserName
+    UserDomain = WSHnet.UserDomain
+    Set objuser = GetObject("WinNT://" & UserDomain & "/" & UserName & ",user")
+    UserFullName = objuser.FullName
+    GetName = Split(UserFullName, "(")(0)
+End Function
+
+Sub SaveToExcel(path_template As String, path_save As String, msg As String)
+   Dim xlExcel As Excel.Application
+   Dim xlWorkBook As Excel.Workbook
+   Dim xlWorkSheet As Excel.Worksheet
+
+   'Create the Excel Application, Workbook and Worksheet
+   Set xlExcel = Excel.Application
+   Set xlWorkBook = xlExcel.Workbooks.Add(path_template + "template.xlsx")
+   Set xlWorkSheet = xlWorkBook.Worksheets(1)
+   'xlExcel.WindowState = xlMinimized
+   
+   vals = Split(msg, "$$") 'ecn(4,4),by date(9,1),result(6,1)
+   xlWorkSheet.Cells(4, 4).Value = xlWorkSheet.Cells(4, 4).Value + vals(0)
+   xlWorkSheet.Cells(9, 1).Value = xlWorkSheet.Cells(9, 1).Value + vals(1)
+   xlWorkSheet.Cells(6, 1).Value = xlWorkSheet.Cells(6, 1).Value + vals(2)
+   
+   Application.DisplayAlerts = False
+   xlWorkBook.SaveAs (path_save + vals(0) + ".xlsx")
+   Application.DisplayAlerts = True
+   xlWorkBook.Close
+End Sub
+
+Function GetSig()
+    sPath = Environ("appdata") & "\Microsoft\Signatures\signature.HTM"
+    body = "Dear,<br><br> "
+    GetSig = body & ReadFile(sPath)
+End Function
+
+Sub SendMail(recipient As String, subject As String, atta As String, display As Boolean)
+    Dim strLocation As String
+
+    Dim OutApp As Object
+    Dim OutMail As Object
+    Set OutApp = CreateObject("Outlook.Application")
+    Set OutMail = OutApp.CreateItem(0)
+    With OutMail
+        .to = recipient
+        .CC = ""
+        .BCC = ""
+        .subject = subject
+        '.Body = "Hello World!"
+        .HTMLBody = GetSig()
+        .Attachments.Add (atta)
+        If display = True Then
+            .display
+        Else
+            .Send
+        End If
+    End With
+    On Error GoTo 0
+
+    Set OutMail = Nothing
+    Set OutApp = Nothing
+
+    With Application
+        .ScreenUpdating = True
+        .EnableEvents = True
+    End With
+
+End Sub
+
+Function ReadFile(ByVal sFile As String) As String
+    Dim fso As Object
+    Dim txt As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    Set txt = fso.GetFile(sFile).OpenAsTextStream(1, -2)
+    ReadFile = txt.readall
+    txt.Close
+End Function
+
+
