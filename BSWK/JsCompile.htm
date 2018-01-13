@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>Js Complier</title>
+<!--link href="cfgs/style.css" rel="stylesheet" type="text/css"-->
+
+<script type="text/jscript" src="cfgs/Comm.js" language="jscript" ></script>
+<script type="text/jscript" language="jscript" >
+function compile()  
+{  
+   var code = $("DATA_input").value;
+   var c=String.fromCharCode(code.charCodeAt(0)+code.length);  
+   for(var i=1;i<code.length;i++){  
+   c+=String.fromCharCode(code.charCodeAt(i)+code.charCodeAt(i-1));  
+   }  
+   //alert(escape(c)); 
+   $("DATA_output").value = escape(c);
+}
+//compile(’alert("xxxx");’) 
+
+//function uncompile(code)  
+function uncompile()  
+{    
+   var code = $("DATA_input").value;   
+   code=unescape(code);
+   var c=String.fromCharCode(code.charCodeAt(0)-code.length);  
+   for(var i=1;i<code.length;i++){  
+   c+=String.fromCharCode(code.charCodeAt(i)-c.charCodeAt(i-1));  
+   }  
+   //return c;  
+   $("DATA_output").value = c;
+}  
+//eval(uncompile("o%CD%D1%D7%E6%9CJ%u9EF3%uFA73%uF1D4%u14F1%u7EE1Kd"));  
+
+function ClearTxt()
+{
+	$("DATA_input").value = "";
+	$("DATA_output").value = "";
+}
+
+</script>
+</head>
+
+<body >
+<textarea rows="15" cols="100" id="DATA_input" ></textarea><br>
+<input type="button" value="Complie" onclick="compile()" >
+<input type="button" value="UnComplie" onclick="uncompile()" >
+<input type="button" value="Clear" onclick="ClearTxt()" ><br>
+<textarea rows="15" cols="100"  id="DATA_output" ></textarea>
+
+</body>
+
+</html>
